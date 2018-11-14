@@ -1,4 +1,5 @@
 # URLs / Images Checker
+[![Build Status](https://travis-ci.org/dalenguyen/urls-checker.svg?branch=master)](https://travis-ci.org/dalenguyen/urls-checker)
 
 Get all urls from a page - including images, then check whether all the urls is working or not.
 
