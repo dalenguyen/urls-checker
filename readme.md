@@ -12,7 +12,7 @@ npm install urls-checker
 ## Usage for Links
 
 ```javascript
-const { urlsChecker } = require('../index');
+const { urlsChecker } = require('urls-checker');
 
 urlsChecker('https://example.com') // http / https is important
     .then(res => {
@@ -36,7 +36,7 @@ The result is an object of ok, fail and error urls
 This method may not get all of the images because of the asynchronous loading.
 
 ```javascript
-const { imagesChecker } = require('../index');
+const { imagesChecker } = require('urls-checker');
 
 imagesChecker('https://example.com') // http / https is important
     .then(res => {
