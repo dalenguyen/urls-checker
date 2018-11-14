@@ -8,13 +8,18 @@ const cheerio = require('cheerio');
  * @param {*} url 
  */
 const getAllUrls = (url) => {    
-    console.log('Start getting url list from:', url);    
+    // console.log('Start getting url list from:', url);    
     return new Promise((resolve, reject) => {
         request(url, async (err, res, body) => {
             if(err) {
-                reject(err)
-            }    
-            resolve(await returnUrlList(body, url));   
+                reject(err.message)
+            }            
+            
+            if(res === undefined) {                          
+                reject({message: err.message})
+            } else {
+                resolve(await returnUrlList(body, url));                 
+            }             
         });
     }); 
 }
@@ -63,26 +68,30 @@ const returnUrlListWithExternal = (body, url) => {
  * @param {*} url 
  */
 const returnUrlList = (body, url) => {
-    return new Promise(resolve => {
-        const urlList = [];                            
+    return new Promise((resolve, reject) => {
+        if(body) {
+            const urlList = [];                            
 
-        let $ = cheerio.load(body);
-        let links = $('a')
-        $(links).each((i, link) => {                
-            let href = $(link).attr('href');
-            if(href !== undefined) {
-                if(!href.includes('http')) {
-                    href = url + href;
-                }
-        
-                // Only push if url doesn't exist in the array
-                if(urlList.indexOf(href) === -1) {
-                    urlList.push(href);
-                }    
-            }      
-        });
-
-        resolve(urlList);
+            let $ = cheerio.load(body);
+            let links = $('a')
+            $(links).each((i, link) => {                
+                let href = $(link).attr('href');
+                if(href !== undefined) {
+                    if(!href.includes('http')) {
+                        href = url + href;
+                    }
+            
+                    // Only push if url doesn't exist in the array
+                    if(urlList.indexOf(href) === -1) {
+                        urlList.push(href);
+                    }    
+                }      
+            });
+    
+            resolve(urlList);
+        } else {
+            reject({message: `Cannot get content from ${url}`});
+        }        
     })
 }
 
@@ -92,9 +101,9 @@ const returnUrlList = (body, url) => {
  */
 const getUrlResult = (url) => {
     return new Promise(resolve => {
-        request(url, (err, res, body) => { 
-            if(res === undefined) {                
-                resolve({err: url});
+        request(url, (err, res, body) => {             
+            if(res === undefined) {                    
+                resolve({err: url, code: err.message});
             } else {                    
                 if(res.statusCode !== 200) {                    
                     resolve({fail: url, code: res.statusCode});
@@ -112,40 +121,37 @@ const getUrlResult = (url) => {
  */
 const urlsChecker = (baseUrl) => {
     return new Promise(async (resolve, reject) => {
-        let urls = await getAllUrls(baseUrl);        
-
-        const okUrls = [];
-        const failUrls = [];
-        const errorURls = [];    
-
-        for (let index = 0; index < urls.length; index++) {
-            let urlResult = await getUrlResult(urls[index]);               
-                                        
-            if(urlResult.err) {
-                errorURls.push(urls[index]);
-            } else if (urlResult.fail) {
-                failUrls.push([urls[index], urlResult.code]);
-            } else {
-                okUrls.push(urls[index]);
-            }            
-        }
-
-        resolve({
-            ok: okUrls,
-            fail: failUrls,
-            error: errorURls
-        })                        
+        if(baseUrl.includes('http')) {
+            let urls;
+            try {
+                urls = await getAllUrls(baseUrl);      
+                const okUrls = [];
+                const failUrls = [];
+                const errorURls = [];    
+        
+                for (let index = 0; index < urls.length; index++) {
+                    let urlResult = await getUrlResult(urls[index]);               
+                                                
+                    if(urlResult.err) {
+                        errorURls.push([urls[index], urlResult.code]);
+                    } else if (urlResult.fail) {
+                        failUrls.push([urls[index], urlResult.code]);
+                    } else {
+                        okUrls.push(urls[index]);
+                    }            
+                }        
+                resolve({
+                    ok: okUrls,
+                    fail: failUrls,
+                    error: errorURls
+                }) 
+            } catch (error) {
+                reject(error);
+            }                                
+        } else {
+            reject('The URL is invalid!');
+        }                    
     });
 }
 
 module.exports = urlsChecker;
-
-// urlsChecking('https://google.ca').then(res => {
-//     console.log(res);
-// }).catch(err => console.log(err));
-
-// Get all URLs from a website 
-
-// Put all visited URLs in an array
-
-// Check for availability of the URL and return it
