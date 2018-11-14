@@ -6,8 +6,9 @@ const cheerio = require('cheerio');
 /**
  * Return a list of urls
  * @param {*} url 
+ * @param {*} type Default is url
  */
-const getAllUrls = (url) => {    
+const getAllUrls = (url, type='url') => {    
     // console.log('Start getting url list from:', url);    
     return new Promise((resolve, reject) => {
         request(url, async (err, res, body) => {
@@ -16,9 +17,13 @@ const getAllUrls = (url) => {
             }            
             
             if(res === undefined) {                          
-                reject({message: err.message})
-            } else {
-                resolve(await returnUrlList(body, url));                 
+                reject({message: err.message});
+            } else {                                
+                if(type === 'img') {                    
+                    resolve(await returnImgList(body, url));                 
+                } else {
+                    resolve(await returnUrlList(body, url));                 
+                }                
             }             
         });
     }); 
@@ -73,9 +78,43 @@ const returnUrlList = (body, url) => {
             const urlList = [];                            
 
             let $ = cheerio.load(body);
-            let links = $('a')
+            let links = $('a');
             $(links).each((i, link) => {                
                 let href = $(link).attr('href');
+                if(href !== undefined) {
+                    if(!href.includes('http')) {
+                        href = url + href;
+                    }
+            
+                    // Only push if url doesn't exist in the array
+                    if(urlList.indexOf(href) === -1) {
+                        urlList.push(href);
+                    }    
+                }      
+            });
+    
+            resolve(urlList);
+        } else {
+            reject({message: `Cannot get content from ${url}`});
+        }        
+    })
+}
+
+/**
+ * Return an array of image urls
+ * @param {*} body 
+ * @param {*} url 
+ */
+const returnImgList = (body, url) => {
+    return new Promise((resolve, reject) => {
+        if(body) {
+            const urlList = [];                            
+
+            let $ = cheerio.load(body);
+            let links = $('img');            
+            
+            $(links).each((i, link) => {                
+                let href = $(link).attr('src');
                 if(href !== undefined) {
                     if(!href.includes('http')) {
                         href = url + href;
@@ -154,4 +193,45 @@ const urlsChecker = (baseUrl) => {
     });
 }
 
-module.exports = urlsChecker;
+/**
+ * Start checking images from the base url
+ * @param {} baseUrl 
+ */
+const imagesChecker = (baseUrl) => {
+    return new Promise(async (resolve, reject) => {
+        if(baseUrl.includes('http')) {
+            let urls;
+            try {
+                urls = await getAllUrls(baseUrl, 'img');                
+                    
+                const okUrls = [];
+                const failUrls = [];
+                const errorURls = [];    
+        
+                for (let index = 0; index < urls.length; index++) {
+                    let urlResult = await getUrlResult(urls[index]);               
+                                                
+                    if(urlResult.err) {
+                        errorURls.push([urls[index], urlResult.code]);
+                    } else if (urlResult.fail) {
+                        failUrls.push([urls[index], urlResult.code]);
+                    } else {
+                        okUrls.push(urls[index]);
+                    }            
+                }        
+                resolve({
+                    ok: okUrls,
+                    fail: failUrls,
+                    error: errorURls
+                }) 
+            } catch (error) {
+                reject(error);
+            }                                
+        } else {
+            reject('The URL is invalid!');
+        }                    
+    });
+}
+
+
+module.exports = { urlsChecker, imagesChecker };

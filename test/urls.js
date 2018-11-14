@@ -1,6 +1,6 @@
 'use strict';
 
-const urlsChecker = require('../index');
+const { urlsChecker } = require('../index');
 const expect = require('chai').expect;
 
 describe('Urls Checker Test:', () => {

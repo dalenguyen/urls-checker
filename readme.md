@@ -1,6 +1,6 @@
-# URLs Checker
+# URLs / Images Checker
 
-Get all urls from a page, then check whether all the urls is working or not.
+Get all urls from a page - including images, then check whether all the urls is working or not.
 
 ## Getting started
 
@@ -11,7 +11,7 @@ npm install urls-checker
 ## Usage for Links
 
 ```javascript
-const urlsChecker = require('../index');
+const { urlsChecker } = require('../index');
 
 urlsChecker('https://example.com') // http / https is important
     .then(res => {
@@ -31,6 +31,28 @@ The result is an object of ok, fail and error urls
 ```
 
 ## Usage for Images
+
+This method may not get all of the images because of the asynchronous loading.
+
+```javascript
+const { imagesChecker } = require('../index');
+
+imagesChecker('https://example.com') // http / https is important
+    .then(res => {
+        console.log(res);
+    })
+    .catch(err => console.log(err));
+```
+
+The result is an object of ok, fail and error urls
+
+```sh
+{
+    ok: ['list-of-working-urls'],           // status code: 200
+    fail: [['url', 'status-code'], [...]],  // status code will not be 200
+    error: [['url', 'message'], [...]],          // Could be certificate / authenticate error
+}
+```
 
 ## Urls Checker for the whole website
 

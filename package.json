@@ -1,6 +1,6 @@
 {
   "name": "urls-checker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Get all urls from a page, then check whether all the urls is working or not.",
   "main": "index.js",
   "scripts": {
