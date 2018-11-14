@@ -1,6 +1,6 @@
 {
   "name": "urls-checker",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Get all urls from a page, then check whether all the urls is working or not.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "request": "^2.88.0"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "repository": {
     "type": "git",
