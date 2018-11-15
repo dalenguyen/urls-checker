@@ -1,11 +1,11 @@
 {
   "name": "urls-checker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Get all urls from a page, then check whether all the urls is working or not.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --timeout 9999999 --exit"
-  },  
+  },
   "author": {
     "name": "Dale Nguyen",
     "email": "dungnq@itbox4vn.com",
@@ -16,7 +16,7 @@
     "url": "https://github.com/dalenguyen/urls-checker/issues"
   },
   "keywords": [
-    "urls-checker"    
+    "urls-checker"
   ],
   "license": "MIT",
   "dependencies": {
@@ -31,5 +31,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dalenguyen/urls-checker.git"
+  },
+  "devDependencies": {
+    "har-validator": "^5.1.3"
   }
 }
