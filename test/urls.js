@@ -5,7 +5,7 @@ const expect = require('chai').expect;
 
 describe('Urls Checker Test:', () => {
     it('Get URLs result', async () => {        
-        let results = await urlsChecker('https://qa.web.ci-internal.com/en/funds/daily-prices.html');               
+        let results = await urlsChecker('https://google.ca');               
         expect(results.ok.length).to.be.above(0);
     });    
     it('Test for invalid URL without http/https', async () => {        
