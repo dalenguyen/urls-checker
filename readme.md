@@ -14,7 +14,7 @@ npm install urls-checker
 ```javascript
 const { urlsChecker } = require('urls-checker');
 
-urlsChecker('https://example.com') // http / https is important
+urlsChecker('https://example.com', 'main-domain' - optional) // http / https is important
     .then(res => {
         console.log(res);
     })
@@ -38,7 +38,7 @@ This method may not get all of the images because of the asynchronous loading.
 ```javascript
 const { imagesChecker } = require('urls-checker');
 
-imagesChecker('https://example.com') // http / https is important
+imagesChecker('https://example.com', , 'main-domain' - optional) // http / https is important
     .then(res => {
         console.log(res);
     })
@@ -54,6 +54,11 @@ The result is an object of ok, fail and error urls
     error: [['url', 'message'], [...]],          // Could be certificate / authenticate error
 }
 ```
+
+## Note 
+
+* The current number of link that this package can check is 400.
+* The second parameter - 'main-domain' - is OPTIONAL. Because when you check a page http://example.com/bla-bla-bla. You will need the base domain to get the absolute URL of images or relative paths inside your page.
 
 ## Urls Checker for the whole website
 
