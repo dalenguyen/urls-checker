@@ -5,14 +5,14 @@ const expect = require('chai').expect;
 
 describe('Urls Checker Test:', () => {
     it('Get URLs result', async () => {        
-        let results = await urlsChecker('https://google.ca');               
-        expect(results.ok.length).to.be.above(0);
+        let results = await urlsChecker('https://google.com');        
+        expect(results.ok.length).to.be.above(0);        
     });    
     it('Test for invalid URL without http/https', async () => {        
         try {
             await urlsChecker('google');
         } catch (error) {            
-            expect(error).to.equal('The URL is invalid!')
+            expect(error).to.equal('google is invalid!')
         }
     });    
     it('Test Invalid URL', async () => {        

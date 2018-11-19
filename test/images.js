@@ -5,7 +5,7 @@ const expect = require('chai').expect;
 
 describe('Images Checker Test:', () => {
     it('Get Ok Images result', async () => {        
-        let results = await imagesChecker('https://www.google.com/');  
+        let results = await imagesChecker('https://www.google.com/');        
         expect(results.ok.length).to.be.above(0);                          
     });
     it('Check for separate domain', async () => {        
@@ -16,7 +16,7 @@ describe('Images Checker Test:', () => {
         try {
             await imagesChecker('google');
         } catch (error) {            
-            expect(error).to.equal('The URL is invalid!')
+            expect(error).to.equal('google is invalid!')
         }
     });    
     it('Test Invalid URL', async () => {        

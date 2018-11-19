@@ -57,8 +57,8 @@ The result is an object of ok, fail and error urls
 
 ## Note 
 
-* The current number of link that this package can check is 400.
-* The second parameter - 'main-domain' - is OPTIONAL. Because when you check a page http://example.com/bla-bla-bla. You will need the base domain to get the absolute URL of images or relative paths inside your page.
+* The maximum number of links that this package can check is 400.
+* The second parameter - 'main-domain' - is OPTIONAL. Because when you check a page http://example.com/bla-bla-bla, you will need a base domain to get the absolute URL of images or relative paths inside your page.
 
 ## Urls Checker for the whole website
 
