@@ -19,7 +19,7 @@ describe('Urls Checker Test:', () => {
         try {
             await urlsChecker('https://gooasdfagle.ca') ;
         } catch (error) {
-            console.log(error);
+       
             expect(error).to.equal('getaddrinfo ENOTFOUND gooasdfagle.ca')
         }
     });    
