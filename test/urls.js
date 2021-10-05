@@ -19,7 +19,8 @@ describe('Urls Checker Test:', () => {
         try {
             await urlsChecker('https://gooasdfagle.ca') ;
         } catch (error) {
-            expect(error).to.equal('getaddrinfo ENOTFOUND gooasdfagle.ca gooasdfagle.ca:443')
+       
+            expect(error).to.equal('getaddrinfo ENOTFOUND gooasdfagle.ca')
         }
     });    
 })

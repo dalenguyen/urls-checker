@@ -23,7 +23,8 @@ describe('Images Checker Test:', () => {
         try {
             await imagesChecker('https://gooasdfagle.ca') ;
         } catch (error) {            
-            expect(error).to.equal('getaddrinfo ENOTFOUND gooasdfagle.ca gooasdfagle.ca:443')
+            
+            expect(error).to.equal('getaddrinfo ENOTFOUND gooasdfagle.ca')
         }
     });  
 })
